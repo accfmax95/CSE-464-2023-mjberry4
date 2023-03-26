@@ -176,5 +176,50 @@ public class GraphManager {
         }
     }
 
+    //Feature 6 - DFS Search
+    public String DFSGraphSearch(MutableNode src, MutableNode dst) {
+
+        String path = "";
+        Map<MutableNode, MutableNode> parent = new HashMap<>();
+        Stack<MutableNode> stack = new Stack<>();
+
+        if (src == null || dst == null) {
+
+            return null;
+        }
+
+        stack.push(src);
+
+        while (!stack.isEmpty()) {
+
+            MutableNode current = stack.pop();
+
+            if (current.equals(dst)) {
+
+                while (parent.containsKey(current)) {
+
+                    current = parent.get(current);
+                    path = current.name() + " -> " + path;
+                }
+
+                path = path + dst.name();
+                return path;
+            }
+
+            for (Link link : current.links()) {
+
+                LinkTarget neighLink = link.to();
+                MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
+                if (!parent.containsKey(neighbor)) {
+
+                    stack.push(neighbor);
+                    parent.put(neighbor, current);
+                }
+            }
+        }
+
+        return path;
+    }
+
 }
 
