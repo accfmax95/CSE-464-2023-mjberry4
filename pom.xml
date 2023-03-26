@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>mjberry4@asu.edu</groupId>
+    <groupId>edu.asu.ProjectPart1</groupId>
     <artifactId>CSE-464-2023-mjberry4</artifactId>
     <version>1.0-SNAPSHOT</version>
 
