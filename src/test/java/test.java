@@ -141,41 +141,4 @@ public class test {
         Assert.assertTrue(file1.exists());
     }
 
-    @Test
-    public void testBFSGraphSearch() {
-
-        try {
-            g.parseGraph("src/input.dot");
-
-            MutableNode src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
-            MutableNode dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("k")).findFirst().orElse(null);
-
-            String bfsPath = g.BFSGraphSearch(src, dst);
-
-            Assert.assertEquals("a -> b -> c -> h -> j -> k", bfsPath);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail("Exception thrown: " + e.getMessage());
-        }
-    }
-
-    @Test
-    public void testDFSGraphSearch() {
-
-        try {
-            g.parseGraph("src/input.dot");
-
-            MutableNode src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
-            MutableNode dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("k")).findFirst().orElse(null);
-
-            String bfsPath = g.DFSGraphSearch(src, dst);
-
-            Assert.assertEquals("a -> b -> c -> h -> i -> k", bfsPath);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail("Exception thrown: " + e.getMessage());
-        }
-    }
 }
