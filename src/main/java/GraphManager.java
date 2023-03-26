@@ -176,5 +176,65 @@ public class GraphManager {
         }
     }
 
+    //Feature 5 - BFS Search
+    public String BFSGraphSearch(MutableNode src, MutableNode dst) {
+
+        String path = "";
+        Map<MutableNode, MutableNode> parent = new HashMap<>();
+        Queue<MutableNode> queue = new LinkedList<>();
+
+        if (src == null || dst == null) {
+
+            return null;
+        }
+
+        queue.add(src);
+
+        int count = 0;
+        while (!queue.isEmpty()) {
+
+            MutableNode current = queue.poll();
+
+            if (current.equals(dst)) {
+
+                if (count == 0) {
+
+                    path = path + current.name();
+                } else {
+
+                    path = path + current.name();
+                }
+
+                while (parent.containsKey(current)) {
+
+                    current = parent.get(current);
+                    if (current != null) {
+
+                        path = current.name().toString() + " -> " + path;
+                    }
+
+                }
+
+                return path;
+            }
+
+
+            for (Link link : current.links()) {
+
+                LinkTarget neighLink = link.to();
+                MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
+                if (!parent.containsKey(neighbor)) {
+
+                    queue.add(neighbor);
+                    parent.put(neighbor, current);
+                }
+            }
+
+            count++;
+        }
+
+        return path;
+    }
+
 }
 
