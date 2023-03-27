@@ -129,7 +129,7 @@ public class GraphManager {
                 destNode = node;
             }
         }
-
+        
         srcNode.links().add(srcNode.linkTo(destNode.asLinkTarget()));
     }
 
@@ -175,6 +175,7 @@ public class GraphManager {
                 break;
         }
     }
+
 
     //Feature 5 - BFS Search
     public String BFSGraphSearch(MutableNode src, MutableNode dst) {
