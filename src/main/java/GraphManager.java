@@ -176,8 +176,8 @@ public class GraphManager {
         }
     }
 
-    //Feature 5 - BFS Search
-    public String BFSGraphSearch(MutableNode src, MutableNode dst) {
+    // Feature 5 - BFS Search
+    public String GraphSearch(MutableNode src, MutableNode dst) {
 
         String path = "";
         Map<MutableNode, MutableNode> parent = new HashMap<>();
