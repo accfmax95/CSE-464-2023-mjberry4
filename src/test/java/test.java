@@ -142,7 +142,7 @@ public class test {
     }
 
     @Test
-    public void testBFSGraphSearch() {
+    public void testGraphSearch() {
 
         try {
             g.parseGraph("src/input.dot");
