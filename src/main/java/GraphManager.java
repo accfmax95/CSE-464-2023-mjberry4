@@ -194,7 +194,6 @@ public class GraphManager {
         while (!queue.isEmpty()) {
 
             MutableNode current = queue.poll();
-
             if (current.equals(dst)) {
 
                 if (count == 0) {
