@@ -140,4 +140,5 @@ public class test {
         g.outputGraphics("src/graphic.png", "PNG");
         Assert.assertTrue(file1.exists());
     }
+
 }
