@@ -153,11 +153,12 @@ public class GraphManagerTest {
             String bfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.BFS);
 
             Assert.assertEquals("a -> b -> c -> h -> j -> k", bfsPath);
-            System.out.println(bfsPath);
+            System.out.println("BFS Output: " + bfsPath);
 
             String dfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.DFS);
 
             Assert.assertEquals("a -> b -> c -> h -> i -> k", dfsPath);
+            System.out.println("DFS Output: " + dfsPath);
 
         } catch (Exception e) {
             e.printStackTrace();
