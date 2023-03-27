@@ -176,8 +176,8 @@ public class GraphManager {
         }
     }
 
-    //Feature 6 - DFS Search
-    public String DFSGraphSearch(MutableNode src, MutableNode dst) {
+    // Feature 6 - DFS Search
+    public String GraphSearch(MutableNode src, MutableNode dst) {
 
         String path = "";
         Map<MutableNode, MutableNode> parent = new HashMap<>();
