@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import guru.nidi.graphviz.model.*;
 
-public class test {
+public class GraphManagerTest {
 
     GraphManager g;
 
