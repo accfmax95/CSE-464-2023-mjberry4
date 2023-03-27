@@ -175,64 +175,116 @@ public class GraphManager {
                 break;
         }
     }
-    
-    // Feature 5 - BFS Search
-    public String GraphSearch(MutableNode src, MutableNode dst) {
 
-        String path = "";
-        Map<MutableNode, MutableNode> parent = new HashMap<>();
-        Queue<MutableNode> queue = new LinkedList<>();
+    public String GraphSearch(MutableNode src, MutableNode dst, Algorithm algo) {
 
-        if (src == null || dst == null) {
+        if (algo == Algorithm.DFS) {
 
-            return null;
-        }
+            String path = "";
+            Map<MutableNode, MutableNode> parent = new HashMap<>();
+            Stack<MutableNode> stack = new Stack<>();
 
-        queue.add(src);
+            if (src == null || dst == null) {
 
-        int count = 0;
-        while (!queue.isEmpty()) {
+                return null;
+            }
 
-            MutableNode current = queue.poll();
-            if (current.equals(dst)) {
+            stack.push(src);
 
-                if (count == 0) {
+            while (!stack.isEmpty()) {
 
-                    path = path + current.name();
-                } else {
+                MutableNode current = stack.pop();
 
-                    path = path + current.name();
-                }
+                if (current.equals(dst)) {
 
-                while (parent.containsKey(current)) {
+                    while (parent.containsKey(current)) {
 
-                    current = parent.get(current);
-                    if (current != null) {
-
-                        path = current.name().toString() + " -> " + path;
+                        current = parent.get(current);
+                        path = current.name() + " -> " + path;
                     }
 
+                    path = path + dst.name();
+                    return path;
                 }
 
-                return path;
-            }
+                for (Link link : current.links()) {
 
+                    LinkTarget neighLink = link.to();
+                    MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
+                    if (!parent.containsKey(neighbor)) {
 
-            for (Link link : current.links()) {
-
-                LinkTarget neighLink = link.to();
-                MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
-                if (!parent.containsKey(neighbor)) {
-
-                    queue.add(neighbor);
-                    parent.put(neighbor, current);
+                        stack.push(neighbor);
+                        parent.put(neighbor, current);
+                    }
                 }
             }
 
-            count++;
+            return path;
+        } else if (algo == Algorithm.BFS) {
+
+            String path = "";
+            Map<MutableNode, MutableNode> parent = new HashMap<>();
+            Queue<MutableNode> queue = new LinkedList<>();
+
+            if (src == null || dst == null) {
+
+                return null;
+            }
+
+            queue.add(src);
+
+            int count = 0;
+            while (!queue.isEmpty()) {
+
+                MutableNode current = queue.poll();
+                if (current.equals(dst)) {
+
+                    if (count == 0) {
+
+                        path = path + current.name();
+                    } else {
+
+                        path = path + current.name();
+                    }
+
+                    while (parent.containsKey(current)) {
+
+                        current = parent.get(current);
+                        if (current != null) {
+
+                            path = current.name().toString() + " -> " + path;
+                        }
+
+                    }
+
+                    return path;
+                }
+
+
+                for (Link link : current.links()) {
+
+                    LinkTarget neighLink = link.to();
+                    MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
+                    if (!parent.containsKey(neighbor)) {
+
+                        queue.add(neighbor);
+                        parent.put(neighbor, current);
+                    }
+                }
+
+                count++;
+            }
+
+            return path;
         }
 
-        return path;
+        return null;
+    }
+
+    enum Algorithm {
+
+        BFS,
+        DFS
     }
 }
 
