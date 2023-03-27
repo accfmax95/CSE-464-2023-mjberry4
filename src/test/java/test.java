@@ -150,9 +150,13 @@ public class test {
             MutableNode src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
             MutableNode dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("k")).findFirst().orElse(null);
 
-            String bfsPath = g.GraphSearch(src, dst);
+            String bfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.BFS);
 
-            Assert.assertEquals("a -> b -> c -> h -> i -> k", bfsPath);
+            Assert.assertEquals("a -> b -> c -> h -> j -> k", bfsPath);
+
+            String dfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.DFS);
+
+            Assert.assertEquals("a -> b -> c -> h -> i -> k", dfsPath);
 
         } catch (Exception e) {
             e.printStackTrace();

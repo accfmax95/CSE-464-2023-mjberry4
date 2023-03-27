@@ -129,7 +129,7 @@ public class GraphManager {
                 destNode = node;
             }
         }
-        
+
         srcNode.links().add(srcNode.linkTo(destNode.asLinkTarget()));
     }
 
@@ -176,50 +176,115 @@ public class GraphManager {
         }
     }
 
-    // Feature 6 - DFS Search
-    public String GraphSearch(MutableNode src, MutableNode dst) {
+    public String GraphSearch(MutableNode src, MutableNode dst, Algorithm algo) {
 
-        String path = "";
-        Map<MutableNode, MutableNode> parent = new HashMap<>();
-        Stack<MutableNode> stack = new Stack<>();
+        if (algo == Algorithm.DFS) {
 
-        if (src == null || dst == null) {
+            String path = "";
+            Map<MutableNode, MutableNode> parent = new HashMap<>();
+            Stack<MutableNode> stack = new Stack<>();
 
-            return null;
-        }
+            if (src == null || dst == null) {
 
-        stack.push(src);
-
-        while (!stack.isEmpty()) {
-
-            MutableNode current = stack.pop();
-
-            if (current.equals(dst)) {
-
-                while (parent.containsKey(current)) {
-
-                    current = parent.get(current);
-                    path = current.name() + " -> " + path;
-                }
-
-                path = path + dst.name();
-                return path;
+                return null;
             }
 
-            for (Link link : current.links()) {
+            stack.push(src);
 
-                LinkTarget neighLink = link.to();
-                MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
-                if (!parent.containsKey(neighbor)) {
+            while (!stack.isEmpty()) {
 
-                    stack.push(neighbor);
-                    parent.put(neighbor, current);
+                MutableNode current = stack.pop();
+
+                if (current.equals(dst)) {
+
+                    while (parent.containsKey(current)) {
+
+                        current = parent.get(current);
+                        path = current.name() + " -> " + path;
+                    }
+
+                    path = path + dst.name();
+                    return path;
+                }
+
+                for (Link link : current.links()) {
+
+                    LinkTarget neighLink = link.to();
+                    MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
+                    if (!parent.containsKey(neighbor)) {
+
+                        stack.push(neighbor);
+                        parent.put(neighbor, current);
+                    }
                 }
             }
+
+            return path;
+        } else if (algo == Algorithm.BFS) {
+
+            String path = "";
+            Map<MutableNode, MutableNode> parent = new HashMap<>();
+            Queue<MutableNode> queue = new LinkedList<>();
+
+            if (src == null || dst == null) {
+
+                return null;
+            }
+
+            queue.add(src);
+
+            int count = 0;
+            while (!queue.isEmpty()) {
+
+                MutableNode current = queue.poll();
+                if (current.equals(dst)) {
+
+                    if (count == 0) {
+
+                        path = path + current.name();
+                    } else {
+
+                        path = path + current.name();
+                    }
+
+                    while (parent.containsKey(current)) {
+
+                        current = parent.get(current);
+                        if (current != null) {
+
+                            path = current.name().toString() + " -> " + path;
+                        }
+
+                    }
+
+                    return path;
+                }
+
+
+                for (Link link : current.links()) {
+
+                    LinkTarget neighLink = link.to();
+                    MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
+                    if (!parent.containsKey(neighbor)) {
+
+                        queue.add(neighbor);
+                        parent.put(neighbor, current);
+                    }
+                }
+
+                count++;
+            }
+
+            return path;
         }
 
-        return path;
+        return null;
     }
 
+    enum Algorithm {
+
+        BFS,
+        DFS
+    }
 }
 
