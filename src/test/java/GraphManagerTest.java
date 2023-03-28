@@ -160,6 +160,23 @@ public class GraphManagerTest {
             Assert.assertEquals("a -> b -> c -> h -> i -> k", dfsPath);
             System.out.println("DFS Output: " + dfsPath);
 
+            src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
+            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("d")).findFirst().orElse(null);
+
+            bfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.BFS);
+
+            Assert.assertEquals("a -> b -> c -> d", bfsPath);
+            System.out.println("BFS Output: " + bfsPath);
+
+            src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("e")).findFirst().orElse(null);
+            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("i")).findFirst().orElse(null);
+
+
+            dfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.DFS);
+
+            Assert.assertEquals("e -> f -> g -> h -> i", dfsPath);
+            System.out.println("DFS Output: " + dfsPath);
+
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Exception thrown: " + e.getMessage());
