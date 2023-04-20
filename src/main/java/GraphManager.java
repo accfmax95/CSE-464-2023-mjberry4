@@ -43,13 +43,13 @@ public class GraphManager {
 
     public String getNodeLabels() {
 
-        String nodes = "";
+        String nodeLabelString = "";
         for (MutableNode node: graph.nodes()) {
 
-            nodes = nodes + node.name() + " ";
+            nodeLabelString = nodeLabelString + node.name() + " ";
         }
 
-        return nodes;
+        return nodeLabelString;
     }
 
     public int getNumEdges() {
@@ -59,13 +59,13 @@ public class GraphManager {
 
     public String getEdges() {
 
-        String nodes = "";
+        String stringOfEdges = "";
         for (Link link: graph.edges()) {
 
-            nodes = nodes + link.from().name() + "->" + link.to().name() + " ";
+            stringOfEdges = stringOfEdges + link.from().name() + "->" + link.to().name() + " ";
         }
 
-        return nodes;
+        return stringOfEdges;
     }
 
     // Feature 2
