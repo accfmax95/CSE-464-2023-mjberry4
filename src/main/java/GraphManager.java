@@ -16,7 +16,9 @@ public class GraphManager {
     // Feature 1
     public void parseGraph(String filepath) throws IOException {
 
-        graph = new Parser().read(new File(filepath));
+        try (InputStream input = new FileInputStream(filepath)) {
+            graph = new Parser().read(input);
+        }
     }
 
     @Override
