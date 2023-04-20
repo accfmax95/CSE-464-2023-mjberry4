@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ProjectPart1" />
+        <module name="CSE-464-2023-mjberry4" />
       </profile>
     </annotationProcessing>
   </component>

@@ -20,6 +20,11 @@ public class GraphManager {
 
     @Override
     public String toString() {
+        printGraphSummary();
+        return graph.toString();
+    }
+
+    private void printGraphSummary() {
         System.out.println("Number of nodes: " + getNumNodes());
         System.out.print("Label of nodes: ");
         System.out.println(getNodeLabels());
@@ -27,8 +32,8 @@ public class GraphManager {
         System.out.println("Node-edge directions: ");
         System.out.println(getEdges());
         System.out.print("\n");
-        return graph.toString();
     }
+
 
     public int getNumNodes() {
 
