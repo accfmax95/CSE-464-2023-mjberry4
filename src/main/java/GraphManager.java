@@ -11,6 +11,7 @@ import java.util.Iterator;
 public class GraphManager {
 
     public MutableGraph graph;
+    private final int DEFAULT_GRAPH_WIDTH = 700;
 
     // Feature 1
     public void parseGraph(String filepath) throws IOException {
@@ -161,7 +162,7 @@ public class GraphManager {
     // Feature 4
     public void outputDOTGraph(String filename) throws IOException {
 
-        Graphviz.fromGraph(graph).width(700).render(Format.DOT).toFile(new File(filename));
+        Graphviz.fromGraph(graph).width(DEFAULT_GRAPH_WIDTH).render(Format.DOT).toFile(new File(filename));
     }
 
     public void outputGraphics(String filename, String format) throws IOException {
@@ -171,12 +172,12 @@ public class GraphManager {
             case "PNG":
             case "png":
 
-                Graphviz.fromGraph(graph).width(700).render(Format.PNG).toFile(new File(filename));
+                Graphviz.fromGraph(graph).width(DEFAULT_GRAPH_WIDTH).render(Format.PNG).toFile(new File(filename));
                 break;
             case "svg":
             case "SVG":
 
-                Graphviz.fromGraph(graph).width(700).render(Format.SVG).toFile(new File(filename));
+                Graphviz.fromGraph(graph).width(DEFAULT_GRAPH_WIDTH).render(Format.SVG).toFile(new File(filename));
                 break;
         }
     }
