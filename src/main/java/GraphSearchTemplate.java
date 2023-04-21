@@ -10,7 +10,7 @@ public abstract class GraphSearchTemplate extends GraphManager {
 
     MutableGraph graph;
 
-    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g) {
+    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g, Algorithm algo) {
         String path = "";
         graph = g;
         Map<MutableNode, MutableNode> parent = new HashMap<>();
@@ -21,16 +21,28 @@ public abstract class GraphSearchTemplate extends GraphManager {
             return null;
         }
 
-        addStartNode(src, stack, queue);
-
-        while (!stack.isEmpty() || !queue.isEmpty()) {
-            MutableNode current = getCurrentNode(stack, queue);
-            if (current.equals(dst)) {
-                path = getPath(current, parent);
-                return path;
+        if (algo == Algorithm.BFS) {
+            addStartNode(src, null, queue);
+            while (!queue.isEmpty()) {
+                MutableNode current = getCurrentNode(null, queue);
+                if (current.equals(dst)) {
+                    path = getPath(current, parent);
+                    return path;
+                }
+                addUnvisitedNeighbors(current, null, queue, parent);
             }
-            addUnvisitedNeighbors(current, stack, queue, parent);
+        } else if (algo == Algorithm.DFS) {
+            addStartNode(src, stack, null);
+            while (!stack.isEmpty()) {
+                MutableNode current = getCurrentNode(stack, null);
+                if (current.equals(dst)) {
+                    path = getPath(current, parent);
+                    return path;
+                }
+                addUnvisitedNeighbors(current, stack, null, parent);
+            }
         }
+
         return path;
     }
 
@@ -59,4 +71,12 @@ public abstract class GraphSearchTemplate extends GraphManager {
         }
         return path;
     }
+
+    enum Algorithm {
+        BFS,
+        DFS
+    }
 }
+
+
+
