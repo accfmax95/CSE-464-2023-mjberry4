@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 
 import guru.nidi.graphviz.model.*;
 
@@ -146,19 +145,17 @@ public class GraphManagerTest {
     public void testGraphSearch() {
 
         try {
-            BFS bfs = new BFS();
-            DFS dfs = new DFS();
             g.parseGraph("src/input.dot");
 
             MutableNode src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
             MutableNode dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("k")).findFirst().orElse(null);
 
-            String bfsPath = bfs.GraphSearch(src, dst, g.graph);
+            String bfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.BFS);
 
             Assert.assertEquals("a -> b -> c -> h -> j -> k", bfsPath);
             System.out.println("BFS Output: " + bfsPath);
 
-            String dfsPath = dfs.GraphSearch(src, dst, g.graph);
+            String dfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.DFS);
 
             Assert.assertEquals("a -> b -> c -> h -> i -> k", dfsPath);
             System.out.println("DFS Output: " + dfsPath);
@@ -166,7 +163,7 @@ public class GraphManagerTest {
             src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
             dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("d")).findFirst().orElse(null);
 
-            bfsPath = bfs.GraphSearch(src, dst, g.graph);
+            bfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.BFS);
 
             Assert.assertEquals("a -> b -> c -> d", bfsPath);
             System.out.println("BFS Output: " + bfsPath);
@@ -175,7 +172,7 @@ public class GraphManagerTest {
             dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("i")).findFirst().orElse(null);
 
 
-            dfsPath = dfs.GraphSearch(src, dst, g.graph);
+            dfsPath = g.GraphSearch(src, dst, GraphManager.Algorithm.DFS);
 
             Assert.assertEquals("e -> f -> g -> h -> i", dfsPath);
             System.out.println("DFS Output: " + dfsPath);
