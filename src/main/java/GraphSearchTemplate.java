@@ -10,7 +10,7 @@ public abstract class GraphSearchTemplate extends GraphManager {
 
     MutableGraph graph;
 
-    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g, Algorithm algo) {
+    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g) {
         String path = "";
         graph = g;
         Map<MutableNode, MutableNode> parent = new HashMap<>();
@@ -21,28 +21,16 @@ public abstract class GraphSearchTemplate extends GraphManager {
             return null;
         }
 
-        if (algo == Algorithm.BFS) {
-            addStartNode(src, null, queue);
-            while (!queue.isEmpty()) {
-                MutableNode current = getCurrentNode(null, queue);
-                if (current.equals(dst)) {
-                    path = getPath(current, parent);
-                    return path;
-                }
-                addUnvisitedNeighbors(current, null, queue, parent);
-            }
-        } else if (algo == Algorithm.DFS) {
-            addStartNode(src, stack, null);
-            while (!stack.isEmpty()) {
-                MutableNode current = getCurrentNode(stack, null);
-                if (current.equals(dst)) {
-                    path = getPath(current, parent);
-                    return path;
-                }
-                addUnvisitedNeighbors(current, stack, null, parent);
-            }
-        }
+        addStartNode(src, stack, queue);
 
+        while (!stack.isEmpty() || !queue.isEmpty()) {
+            MutableNode current = getCurrentNode(stack, queue);
+            if (current.equals(dst)) {
+                path = getPath(current, parent);
+                return path;
+            }
+            addUnvisitedNeighbors(current, stack, queue, parent);
+        }
         return path;
     }
 
@@ -70,11 +58,6 @@ public abstract class GraphSearchTemplate extends GraphManager {
             path = current.name().toString() + " -> " + path;
         }
         return path;
-    }
-
-    enum Algorithm {
-        BFS,
-        DFS
     }
 }
 
