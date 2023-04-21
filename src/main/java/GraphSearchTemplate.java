@@ -10,7 +10,7 @@ public abstract class GraphSearchTemplate extends GraphManager {
 
     MutableGraph graph;
 
-    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g, Algorithm algo) {
+    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g) {
         String path = "";
         graph = g;
         Map<MutableNode, MutableNode> parent = new HashMap<>();
@@ -21,45 +21,16 @@ public abstract class GraphSearchTemplate extends GraphManager {
             return null;
         }
 
-        if (algo == Algorithm.BFS) {
-            addStartNode(src, null, queue);
-            while (!queue.isEmpty()) {
-                MutableNode current = getCurrentNode(null, queue);
-                if (current.equals(dst)) {
-                    path = getPath(current, parent);
-                    return path;
-                }
-                addUnvisitedNeighbors(current, null, queue, parent);
-            }
-        } else if (algo == Algorithm.DFS) {
-            addStartNode(src, stack, null);
-            while (!stack.isEmpty()) {
-                MutableNode current = getCurrentNode(stack, null);
-                if (current.equals(dst)) {
-                    path = getPath(current, parent);
-                    return path;
-                }
-                addUnvisitedNeighbors(current, stack, null, parent);
-            }
-        } else if (algo == Algorithm.RANDOM_WALK) {
-            addStartNode(src, null, null);
-            MutableNode current = src;
-            while (!current.equals(dst)) {
-                List<Link> links = current.links();
-                int size = links.size();
-                if (size == 0) {
-                    return null;
-                }
-                int randomIndex = new Random().nextInt(size);
-                Link randomLink = links.get(randomIndex);
-                LinkTarget neighLink = randomLink.to();
-                MutableNode neighbor = this.graph.nodes().stream().filter(n -> n.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
-                current = neighbor;
-            }
-            path = getPath(current, parent);
-            return path;
-        }
+        addStartNode(src, stack, queue);
 
+        while (!stack.isEmpty() || !queue.isEmpty()) {
+            MutableNode current = getCurrentNode(stack, queue);
+            if (current.equals(dst)) {
+                path = getPath(current, parent);
+                return path;
+            }
+            addUnvisitedNeighbors(current, stack, queue, parent);
+        }
         return path;
     }
 
@@ -88,12 +59,7 @@ public abstract class GraphSearchTemplate extends GraphManager {
         }
         return path;
     }
-
-    enum Algorithm {
-        BFS,
-        DFS,
-        RANDOM_WALK
-    }
 }
+
 
 
