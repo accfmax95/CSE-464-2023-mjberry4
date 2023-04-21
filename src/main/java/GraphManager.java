@@ -176,115 +176,51 @@ public class GraphManager {
         }
     }
 
-    public String GraphSearch(MutableNode src, MutableNode dst, Algorithm algo) {
+}
 
-        if (algo == Algorithm.DFS) {
-
-            String path = "";
-            Map<MutableNode, MutableNode> parent = new HashMap<>();
-            Stack<MutableNode> stack = new Stack<>();
-
-            if (src == null || dst == null) {
-
-                return null;
-            }
-
-            stack.push(src);
-
-            while (!stack.isEmpty()) {
-
-                MutableNode current = stack.pop();
-
-                if (current.equals(dst)) {
-
-                    while (parent.containsKey(current)) {
-
-                        current = parent.get(current);
-                        path = current.name() + " -> " + path;
-                    }
-
-                    path = path + dst.name();
-                    return path;
-                }
-
-                for (Link link : current.links()) {
-
-                    LinkTarget neighLink = link.to();
-                    MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
-                    if (!parent.containsKey(neighbor)) {
-
-                        stack.push(neighbor);
-                        parent.put(neighbor, current);
-                    }
-                }
-            }
-
-            return path;
-        } else if (algo == Algorithm.BFS) {
-
-            String path = "";
-            Map<MutableNode, MutableNode> parent = new HashMap<>();
-            Queue<MutableNode> queue = new LinkedList<>();
-
-            if (src == null || dst == null) {
-
-                return null;
-            }
-
-            queue.add(src);
-
-            int count = 0;
-            while (!queue.isEmpty()) {
-
-                MutableNode current = queue.poll();
-                if (current.equals(dst)) {
-
-                    if (count == 0) {
-
-                        path = path + current.name();
-                    } else {
-
-                        path = path + current.name();
-                    }
-
-                    while (parent.containsKey(current)) {
-
-                        current = parent.get(current);
-                        if (current != null) {
-
-                            path = current.name().toString() + " -> " + path;
-                        }
-
-                    }
-
-                    return path;
-                }
-
-
-                for (Link link : current.links()) {
-
-                    LinkTarget neighLink = link.to();
-                    MutableNode neighbor = graph.nodes().stream().filter(node -> node.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
-                    if (!parent.containsKey(neighbor)) {
-
-                        queue.add(neighbor);
-                        parent.put(neighbor, current);
-                    }
-                }
-
-                count++;
-            }
-
-            return path;
-        }
-
-        return null;
+class BFS extends GraphSearchTemplate {
+    Queue<MutableNode> queue;
+    
+    @Override
+    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
+        this.queue = queue;
+        queue.add(node);
     }
 
-    enum Algorithm {
+    @Override
+    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue) {
+        return queue.poll();
+    }
 
-        BFS,
-        DFS
+    @Override
+    protected void addNodeToSearch(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
+        queue.add(node);
     }
 }
 
+class DFS extends GraphSearchTemplate {
+    Stack<MutableNode> stack;
+
+    @Override
+    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
+        this.stack = stack;
+        stack.push(node);
+    }
+
+    @Override
+    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue) {
+        return stack.pop();
+    }
+
+    @Override
+    protected void addNodeToSearch(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
+        stack.push(node);
+    }
+}
+
+/*
+enum Algorithm {
+
+    BFS,
+    DFS
+}*/
