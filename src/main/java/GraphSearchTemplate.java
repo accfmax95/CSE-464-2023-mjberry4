@@ -5,6 +5,8 @@ import guru.nidi.graphviz.model.MutableNode;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class GraphSearchTemplate extends GraphManager {
 
@@ -52,12 +54,32 @@ public abstract class GraphSearchTemplate extends GraphManager {
     protected abstract void addNodeToSearch(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue);
 
     protected String getPath(MutableNode current, Map<MutableNode, MutableNode> parent) {
+
+        ArrayList<String> pathList = new ArrayList<String>();
         String path = current.name().toString();
+        pathList.add(path);
         while (parent.containsKey(current)) {
+
             current = parent.get(current);
-            path = current.name().toString() + " -> " + path;
+            pathList.add(current.name().toString());
         }
-        return path;
+
+        Collections.reverse(pathList);
+        String path2 = "";
+        for (int i = 0; i < pathList.size(); i++) {
+
+            if (i == 0) {
+
+                path2 = path2 + pathList.get(i);
+            } else {
+
+                path2 = path2 + " -> " + pathList.get(i);
+            }
+
+            System.out.println("Visiting Path: " + path2);
+        }
+
+        return path2;
     }
 }
 

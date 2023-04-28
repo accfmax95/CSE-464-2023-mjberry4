@@ -7,6 +7,7 @@ import static guru.nidi.graphviz.model.Factory.*;
 import java.io.*;
 import java.util.*;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class GraphManager {
 
@@ -239,7 +240,6 @@ class DFS extends GraphSearchTemplate {
         stack.push(node);
     }
 }
-
 
 class RandomWalk extends GraphSearchTemplate {
 

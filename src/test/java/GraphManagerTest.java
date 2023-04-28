@@ -19,8 +19,8 @@ public class GraphManagerTest {
 
     @Test
     public void testParseGraph() {
-        Assert.assertEquals(11, g.getNumNodes());
-        Assert.assertEquals(13, g.getNumEdges());
+        Assert.assertEquals(8, g.getNumNodes());
+        Assert.assertEquals(12, g.getNumEdges());
 
         Assert.assertTrue(g.getNodeLabels().contains("a"));
         Assert.assertTrue(g.getNodeLabels().contains("b"));
@@ -30,40 +30,34 @@ public class GraphManagerTest {
         Assert.assertTrue(g.getNodeLabels().contains("f"));
         Assert.assertTrue(g.getNodeLabels().contains("g"));
         Assert.assertTrue(g.getNodeLabels().contains("h"));
-        Assert.assertTrue(g.getNodeLabels().contains("i"));
-        Assert.assertTrue(g.getNodeLabels().contains("j"));
-        Assert.assertTrue(g.getNodeLabels().contains("k"));
 
-        Assert.assertTrue(g.getEdges().contains("a->e"));
+        Assert.assertTrue(g.getEdges().contains("a->c"));
         Assert.assertTrue(g.getEdges().contains("a->b"));
-        Assert.assertTrue(g.getEdges().contains("b->c"));
-        Assert.assertTrue(g.getEdges().contains("c->d"));
-        Assert.assertTrue(g.getEdges().contains("c->h"));
-        Assert.assertTrue(g.getEdges().contains("d->h"));
-        Assert.assertTrue(g.getEdges().contains("h->i"));
-        Assert.assertTrue(g.getEdges().contains("i->k"));
-        Assert.assertTrue(g.getEdges().contains("j->k"));
-        Assert.assertTrue(g.getEdges().contains("e->f"));
-        Assert.assertTrue(g.getEdges().contains("g->h"));
-        Assert.assertTrue(g.getEdges().contains("f->g"));
-        Assert.assertTrue(g.getEdges().contains("h->j"));
+        Assert.assertTrue(g.getEdges().contains("b->e"));
+        Assert.assertTrue(g.getEdges().contains("b->f"));
+        Assert.assertTrue(g.getEdges().contains("c->e"));
+        Assert.assertTrue(g.getEdges().contains("c->g"));
+        Assert.assertTrue(g.getEdges().contains("d->g"));
+        Assert.assertTrue(g.getEdges().contains("d->f"));
+        Assert.assertTrue(g.getEdges().contains("e->h"));
+        Assert.assertTrue(g.getEdges().contains("f->h"));
 
         System.out.println(g.toString());
     }
 
     @Test
     public void testAddNode() throws Exception {
-        g.addNode("l");
+        g.addNode("i");
         System.out.println(g.toString());
 
-        Assert.assertEquals(12, g.getNumNodes());
-        Assert.assertTrue(g.getNodeLabels().contains("l"));
+        Assert.assertEquals(9, g.getNumNodes());
+        Assert.assertTrue(g.getNodeLabels().contains("i"));
 
         String[] nodes = new String[]{"m", "n", "o", "p"};
         g.addNodes(nodes);
         System.out.println(g.toString());
 
-        Assert.assertEquals(16, g.getNumNodes());
+        Assert.assertEquals(13, g.getNumNodes());
         Assert.assertTrue(g.getNodeLabels().contains("m"));
         Assert.assertTrue(g.getNodeLabels().contains("n"));
         Assert.assertTrue(g.getNodeLabels().contains("o"));
@@ -72,20 +66,13 @@ public class GraphManagerTest {
 
     @Test
     public void testAddEdge() throws Exception {
-        g.addNode("l");
-        g.addEdge("l", "a");
+        g.addNode("i");
+        g.addEdge("a", "i");
         System.out.println(g.toString());
 
-        Assert.assertEquals(12, g.getNumNodes());
-        Assert.assertEquals(14, g.getNumEdges());
-        Assert.assertTrue(g.getEdges().contains("l->a"));
-
-        g.addEdge("f", "e");
-        System.out.println(g.toString());
-
-        Assert.assertEquals(12, g.getNumNodes());
-        Assert.assertEquals(15, g.getNumEdges());
-        Assert.assertTrue(g.getEdges().contains("f->e"));
+        Assert.assertEquals(9, g.getNumNodes());
+        Assert.assertEquals(13, g.getNumEdges());
+        Assert.assertTrue(g.getEdges().contains("a->i"));
     }
 
     @Test
@@ -94,7 +81,7 @@ public class GraphManagerTest {
         System.out.println(g.toString());
 
         Assert.assertFalse(g.getNodeLabels().contains("a"));
-        Assert.assertEquals(10, g.getNumNodes());
+        Assert.assertEquals(7, g.getNumNodes());
     }
 
     @Test
@@ -107,31 +94,30 @@ public class GraphManagerTest {
         Assert.assertFalse(g.getNodeLabels().contains("a"));
         Assert.assertFalse(g.getNodeLabels().contains("b"));
         Assert.assertFalse(g.getNodeLabels().contains("c"));
-        Assert.assertEquals(8, g.getNumNodes());
+        Assert.assertEquals(5, g.getNumNodes());
     }
 
     @Test
     public void testRemoveEdge() {
 
-        g.removeEdge("b", "c");
+        g.removeEdge("b", "f");
         System.out.println(g.toString());
 
-        Assert.assertEquals(11, g.getNumNodes());
-        Assert.assertEquals(12, g.getNumEdges());
-        Assert.assertFalse(g.getEdges().contains("b->c"));
+        Assert.assertEquals(8, g.getNumNodes());
+        Assert.assertEquals(11, g.getNumEdges());
+        Assert.assertFalse(g.getEdges().contains("b->f"));
 
         g.removeEdge("g", "h");
         System.out.println(g.toString());
 
-        Assert.assertEquals(11, g.getNumNodes());
-        Assert.assertEquals(11, g.getNumEdges());
+        Assert.assertEquals(8, g.getNumNodes());
+        Assert.assertEquals(10, g.getNumEdges());
         Assert.assertFalse(g.getEdges().contains("g->h"));
     }
 
     @Test
     public void testOutputDOTGraph() throws IOException {
 
-        g.addEdge("g", "j");
         File file = new File("src/output2.dot");
         g.outputDOTGraph("src/output2.dot");
         Assert.assertTrue(file.exists());
@@ -151,42 +137,41 @@ public class GraphManagerTest {
             g.parseGraph("src/input.dot");
 
             MutableNode src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
-            MutableNode dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("k")).findFirst().orElse(null);
+            MutableNode dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("h")).findFirst().orElse(null);
 
             String bfsPath = bfs.GraphSearch(src, dst, g.graph, Algorithm.BFS);
 
-            Assert.assertEquals("a -> b -> c -> h -> j -> k", bfsPath);
+            Assert.assertEquals("a -> b -> e -> h", bfsPath);
             System.out.println("BFS Output: " + bfsPath);
 
             String dfsPath = dfs.GraphSearch(src, dst, g.graph, Algorithm.DFS);
 
-            Assert.assertEquals("a -> b -> c -> h -> i -> k", dfsPath);
+            Assert.assertEquals("a -> c -> e -> h", dfsPath);
             System.out.println("DFS Output: " + dfsPath);
 
-            src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
-            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("d")).findFirst().orElse(null);
+            src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("d")).findFirst().orElse(null);
+            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("h")).findFirst().orElse(null);
 
             bfsPath = bfs.GraphSearch(src, dst, g.graph, Algorithm.BFS);
 
-            Assert.assertEquals("a -> b -> c -> d", bfsPath);
+            Assert.assertEquals("d -> f -> h", bfsPath);
             System.out.println("BFS Output: " + bfsPath);
-
-            src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("e")).findFirst().orElse(null);
-            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("i")).findFirst().orElse(null);
 
             dfsPath = dfs.GraphSearch(src, dst, g.graph, Algorithm.DFS);
 
-            Assert.assertEquals("e -> f -> g -> h -> i", dfsPath);
+            Assert.assertEquals("d -> g -> h", dfsPath);
             System.out.println("DFS Output: " + dfsPath);
 
             src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
-            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("k")).findFirst().orElse(null);
+            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("h")).findFirst().orElse(null);
+
 
             String rwPath1 = rw.GraphSearch(src, dst, g.graph, Algorithm.RANDOM_WALK);
-            String rwPath2 = rw.GraphSearch(src, dst, g.graph, Algorithm.RANDOM_WALK);
-            Assert.assertNotEquals(rwPath1, rwPath2);
             System.out.println("RW Output: " + rwPath1);
+            String rwPath2 = rw.GraphSearch(src, dst, g.graph, Algorithm.RANDOM_WALK);
             System.out.println("RW Output: " + rwPath2);
+
+            Assert.assertNotEquals(rwPath1, rwPath2);
 
         } catch (Exception e) {
             e.printStackTrace();
