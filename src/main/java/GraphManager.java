@@ -240,7 +240,51 @@ class DFS extends GraphSearchTemplate {
     }
 }
 
+
+class RandomWalk extends GraphSearchTemplate {
+
+    private Random random;
+
+    @Override
+    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm) {
+        if (algorithm == Algorithm.RANDOM_WALK) {
+            random = new Random();
+            stack.push(node);
+        }
+    }
+
+    @Override
+    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm) {
+        if (algorithm == Algorithm.RANDOM_WALK) {
+            return stack.pop();
+        }
+        return null;
+    }
+
+    @Override
+    protected void addNodeToSearch(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
+        stack.push(node);
+    }
+
+    @Override
+    protected void addUnvisitedNeighbors(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue, Map<MutableNode, MutableNode> parent) {
+        List<Link> links = node.links();
+        if (links.size() == 0) {
+            return;
+        }
+        int index = random.nextInt(links.size());
+        Link link = links.get(index);
+        LinkTarget neighLink = link.to();
+        MutableNode neighbor = graph.nodes().stream().filter(n -> n.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
+        if (!parent.containsKey(neighbor)) {
+            addNodeToSearch(neighbor, stack, queue);
+            parent.put(neighbor, node);
+        }
+    }
+}
+
 enum Algorithm {
     BFS,
-    DFS
+    DFS,
+    RANDOM_WALK
 }

@@ -147,7 +147,7 @@ public class GraphManagerTest {
         try {
             BFS bfs = new BFS();
             DFS dfs = new DFS();
-            //RandomWalk rw = new RandomWalk();
+            RandomWalk rw = new RandomWalk();
             g.parseGraph("src/input.dot");
 
             MutableNode src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
@@ -174,11 +174,19 @@ public class GraphManagerTest {
             src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("e")).findFirst().orElse(null);
             dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("i")).findFirst().orElse(null);
 
-
             dfsPath = dfs.GraphSearch(src, dst, g.graph, Algorithm.DFS);
 
             Assert.assertEquals("e -> f -> g -> h -> i", dfsPath);
             System.out.println("DFS Output: " + dfsPath);
+
+            src = g.graph.nodes().stream().filter(node -> node.name().toString().equals("a")).findFirst().orElse(null);
+            dst = g.graph.nodes().stream().filter(node -> node.name().toString().equals("k")).findFirst().orElse(null);
+
+            String rwPath1 = rw.GraphSearch(src, dst, g.graph, Algorithm.RANDOM_WALK);
+            String rwPath2 = rw.GraphSearch(src, dst, g.graph, Algorithm.RANDOM_WALK);
+            Assert.assertNotEquals(rwPath1, rwPath2);
+            System.out.println("RW Output: " + rwPath1);
+            System.out.println("RW Output: " + rwPath2);
 
         } catch (Exception e) {
             e.printStackTrace();
