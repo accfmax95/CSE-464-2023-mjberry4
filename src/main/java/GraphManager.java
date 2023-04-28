@@ -193,14 +193,19 @@ class BFS extends GraphSearchTemplate {
     Queue<MutableNode> queue;
 
     @Override
-    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
-        this.queue = queue;
-        queue.add(node);
+    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm) {
+        if (algorithm == Algorithm.BFS) {
+            this.queue = queue;
+            queue.add(node);
+        }
     }
 
     @Override
-    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue) {
-        return queue.poll();
+    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm) {
+        if (algorithm == Algorithm.BFS) {
+            return queue.poll();
+        }
+        return null;
     }
 
     @Override
@@ -210,17 +215,23 @@ class BFS extends GraphSearchTemplate {
 }
 
 class DFS extends GraphSearchTemplate {
+
     Stack<MutableNode> stack;
 
     @Override
-    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
-        this.stack = stack;
-        stack.push(node);
+    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm) {
+        if (algorithm == Algorithm.DFS) {
+            this.stack = stack;
+            stack.push(node);
+        }
     }
 
     @Override
-    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue) {
-        return stack.pop();
+    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm) {
+        if (algorithm == Algorithm.DFS) {
+            return stack.pop();
+        }
+        return null;
     }
 
     @Override
@@ -229,35 +240,7 @@ class DFS extends GraphSearchTemplate {
     }
 }
 
-class RandomWalk extends GraphSearchTemplate {
-    Queue<MutableNode> queue;
-
-    @Override
-    protected void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
-        this.queue = queue;
-        queue.add(node);
-    }
-
-    @Override
-    protected MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue) {
-        List<MutableNode> neighbors = new ArrayList<>();
-        MutableNode current = queue.poll();
-        for (Link link : current.links()) {
-            LinkTarget neighLink = link.to();
-            MutableNode neighbor = this.graph.nodes().stream().filter(n -> n.name().toString().equals(neighLink.name().toString())).findFirst().orElse(null);
-            neighbors.add(neighbor);
-        }
-        if (neighbors.isEmpty()) {
-            return current;
-        } else {
-            int randomIndex = (int) (Math.random() * neighbors.size());
-            return neighbors.get(randomIndex);
-        }
-    }
-
-    @Override
-    protected void addNodeToSearch(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue) {
-        queue.add(node);
-    }
+enum Algorithm {
+    BFS,
+    DFS
 }
-

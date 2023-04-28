@@ -10,7 +10,7 @@ public abstract class GraphSearchTemplate extends GraphManager {
 
     MutableGraph graph;
 
-    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g) {
+    public final String GraphSearch(MutableNode src, MutableNode dst, MutableGraph g, Algorithm algorithm) {
         String path = "";
         graph = g;
         Map<MutableNode, MutableNode> parent = new HashMap<>();
@@ -21,10 +21,10 @@ public abstract class GraphSearchTemplate extends GraphManager {
             return null;
         }
 
-        addStartNode(src, stack, queue);
+        addStartNode(src, stack, queue, algorithm);
 
         while (!stack.isEmpty() || !queue.isEmpty()) {
-            MutableNode current = getCurrentNode(stack, queue);
+            MutableNode current = getCurrentNode(stack, queue, algorithm);
             if (current.equals(dst)) {
                 path = getPath(current, parent);
                 return path;
@@ -34,9 +34,9 @@ public abstract class GraphSearchTemplate extends GraphManager {
         return path;
     }
 
-    protected abstract void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue);
+    protected abstract void addStartNode(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm);
 
-    protected abstract MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue);
+    protected abstract MutableNode getCurrentNode(Stack<MutableNode> stack, Queue<MutableNode> queue, Algorithm algorithm);
 
     protected void addUnvisitedNeighbors(MutableNode node, Stack<MutableNode> stack, Queue<MutableNode> queue, Map<MutableNode, MutableNode> parent) {
         for (Link link : node.links()) {
@@ -60,6 +60,5 @@ public abstract class GraphSearchTemplate extends GraphManager {
         return path;
     }
 }
-
 
 
